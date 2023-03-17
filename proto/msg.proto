@@ -1,0 +1,14 @@
+syntax = "proto3";
+package msg;
+
+option go_package = "./msg";
+
+message Student {
+  string Name = 1;
+  bool Male = 2;
+  repeated int32 Scores = 3;
+}
+
+message Hello {
+  string Name = 1;
+}

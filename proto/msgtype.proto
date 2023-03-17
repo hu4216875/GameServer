@@ -1,0 +1,19 @@
+syntax = "proto3";
+package msg;
+
+option go_package = "./msg";
+
+
+enum MsgId {
+	RequestRegist = 0;
+	ResponseRegist = 1;
+	RequestLogin = 2;
+	ResponseLogin = 3;
+	RequestLogout = 4;
+	ResponseLogout = 5;
+}
+
+enum ErrCode {
+	NONE = 0;
+	SUCC = 1;
+}
