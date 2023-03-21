@@ -7,15 +7,21 @@ import (
 )
 
 var Server struct {
-	LogLevel    string
-	LogPath     string
-	WSAddr      string
-	CertFile    string
-	KeyFile     string
-	TCPAddr     string
-	MaxConnNum  int
-	ConsolePort int
-	ProfilePath string
+	ServerId             int
+	LogLevel             string
+	LogPath              string
+	WSAddr               string
+	CertFile             string
+	KeyFile              string
+	TCPAddr              string
+	MaxConnNum           int
+	ConsolePort          int
+	ProfilePath          string
+	MaxLocalMongoDBConn  int
+	LocalMongoDBUrl      string
+	MaxGlobalMongoDBConn int
+	GlobalMongoDBUrl     string
+	GameDataPath         string
 }
 
 func init() {

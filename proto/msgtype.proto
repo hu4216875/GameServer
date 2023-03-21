@@ -5,15 +5,26 @@ option go_package = "./msg";
 
 
 enum MsgId {
-	RequestRegist = 0;
-	ResponseRegist = 1;
-	RequestLogin = 2;
-	ResponseLogin = 3;
-	RequestLogout = 4;
-	ResponseLogout = 5;
+	ID_RequestRegist = 0;
+	ID_ResponseRegist = 1;
+	ID_RequestLogin = 2;
+	ID_ResponseLogin = 3;
+	ID_RequestLogout = 4;
+	ID_ResponseLogout = 5;
+	ID_ResponseKickOut = 6;
+	ID_RequestLoadItem = 7;
+	ID_ResponseLoadItem = 8;
+	ID_NotifyUpdateItem = 9;
 }
 
 enum ErrCode {
 	NONE = 0;
 	SUCC = 1;
+	SYSTEM_ERROR = 2; // 系统错误
+	USER_ID_EXIST = 3;// uid 已经存在
+	USERID_EMPTY = 4;//uid 空
+	USERID_OVER_MAX_LEN = 5;//超过uid最大长度
+	FORBIDDEN_USER = 6;// 禁止用户登录
+	ISLOGINING = 7; // 登录中
+	OTHER_LOGIN = 8; // 其他地方登录
 }

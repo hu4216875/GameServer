@@ -1,19 +1,24 @@
 package main
 
 import (
+	"client/game"
+	"client/msg"
 	"encoding/binary"
-	"net"
 	"fmt"
 	"github.com/golang/protobuf/proto"
-	"client/msg"
 	"log"
+	"net"
 )
 
-// msgId 2 dataLen 4 data
+var g_userId = "test"
+
+// DisptchMsg
 func DisptchMsg(conn net.Conn) {
-	recv := make([]byte, 30)
+	recv := make([]byte, 1024*1024)
+	var writeIndex = 0
 	for {
-		if len, err := conn.Read(recv);err==nil {
+		len, err := conn.Read(recv[writeIndex:])
+		if err == nil {
 			if len < 6 {
 				continue
 			}
@@ -21,49 +26,73 @@ func DisptchMsg(conn net.Conn) {
 			msgId := binary.BigEndian.Uint16(recv[4:])
 
 			// 是一个完整包
-			if int(dataLen + 4) == len {
-				temp := &msg.Hello{}
-			    if err := proto.Unmarshal(recv[6:len], temp);err == nil {
-			        fmt.Printf("recv len:%v msgId:%v, content:%s", len,  msgId, temp.Name)
-			    }
+			msgLen := int(dataLen + 4)
+			if len >= msgLen {
+				game.DisptchResponseMsg(msg.MsgId(msgId), recv, len)
+				// 多余一个数据包
+				if len > msgLen {
+					recv = recv[len:]
+					writeIndex = len - msgLen
+				}
 			}
+		} else if err != nil {
+			if len == 0 {
+				fmt.Printf("##################### userId:%v is knick out\n", g_userId)
+				conn.Close()
+				break
+			}
+			fmt.Printf("DisptchMsg err %v", err)
 		}
 	}
 }
 
+func NewRequestRegistMsg() *msg.RequestRegist {
+	return &msg.RequestRegist{
+		UserId: "test",
+		Passwd: "123456",
+	}
+}
+
+func NewRequestLoginMsg() *msg.RequestLogin {
+	return &msg.RequestLogin{
+		UserId: g_userId,
+		Passwd: "123456",
+	}
+}
 
 func main() {
-	conn, err := net.Dial("tcp", "127.0.0.1:3563")
+	game.InitResponseHandler()
+	conn, err := net.Dial("tcp", "192.168.5.8:3563")
 	if err != nil {
 		panic(err)
 	}
 
-	temp := &msg.Hello {
-		Name : "test",
+	msgTemp := NewRequestLoginMsg()
+
+	// 进行编码
+	data, err := proto.Marshal(msgTemp)
+	if err != nil {
+		log.Fatal("marshaling error: ", err)
 	}
 
-	  // 进行编码
-    data, err := proto.Marshal(temp)
-    if err != nil {
-        log.Fatal("marshaling error: ", err)
-    }
-
 	// len + data
-	m := make([]byte, 2 + 4 + len(data))
+	m := make([]byte, 2+4+len(data))
 
 	// 默认使用大端序
-	binary.BigEndian.PutUint32(m, uint32(2 + len(data)))
-	binary.BigEndian.PutUint16(m, 0)
+	binary.BigEndian.PutUint32(m, uint32(2+len(data)))
+
+	//binary.BigEndian.PutUint16(m[4:], uint16(msg.MsgId_ID_RequestRegist))
+	binary.BigEndian.PutUint16(m[4:], uint16(msg.MsgId_ID_RequestLogin))
 
 	copy(m[6:], data)
 
+	fmt.Println(m)
 	// 发送消息
 	conn.Write(m)
 
-	go DisptchMsg(conn)
+	fmt.Println("-------send msg-------")
 
-	for{
+	go DisptchMsg(conn)
+	for {
 	}
 }
-
-

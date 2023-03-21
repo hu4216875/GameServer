@@ -1,10 +1,17 @@
 package internal
 
 import (
+	"fmt"
 	"github.com/name5566/leaf/gate"
+	"github.com/name5566/leaf/log"
+	"server/base"
 	"server/conf"
 	"server/game"
 	"server/msg"
+)
+
+var (
+	skeleton = base.NewSkeleton()
 )
 
 type Module struct {
@@ -26,4 +33,9 @@ func (m *Module) OnInit() {
 		Processor:       msg.Processor,
 		AgentChanRPC:    game.ChanRPC,
 	}
+	log.Debug("gate ServerId:%v start up", conf.Server.ServerId)
+}
+
+func (m *Module) CheckClient() {
+	fmt.Println("CheckClient...")
 }

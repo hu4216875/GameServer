@@ -3,12 +3,47 @@ package msg;
 
 option go_package = "./msg";
 
-message Student {
-  string Name = 1;
-  bool Male = 2;
-  repeated int32 Scores = 3;
+message RequestRegist {
+  string UserId = 1;
+  string Passwd = 2;
 }
 
-message Hello {
-  string Name = 1;
+message ResponseRegist {
+  int32 Result = 1;
 }
+
+message RequestLogin {
+  int32 Version = 1;
+  string UserId = 2;
+  string Passwd = 3;
+}
+
+message ResponseLogin {
+  int32 Result = 1;
+}
+
+message RequestLogout {
+}
+
+message ResponseLogout {
+  int32 Result = 1;
+}
+
+message ResponseKickOut {
+  int32 Result = 2;
+}
+
+message RequestLoadItem {
+
+}
+
+message ResponseLoadItem {
+  int32 Result = 1;
+}
+
+message NotifyUpdateItem {
+  uint32 ItemId = 1;
+  uint32 Num = 2;
+  uint32 LimitDate = 3;
+}
+

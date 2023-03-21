@@ -1,12 +1,11 @@
 package gate
 
 import (
-	"server/game"
+	"server/login"
 	"server/msg"
 )
 
 func init() {
-	//msg.Processor.SetRouter(&msg.RequestLogin{}, login.ChanRPC)
-
-	msg.Processor.SetRouter(&msg.Hello{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.RequestRegist{}, login.ChanRPC)
+	msg.Processor.SetRouter(&msg.RequestLogin{}, login.ChanRPC)
 }
