@@ -1,4 +1,4 @@
-package internal
+package handle
 
 import (
 	"github.com/name5566/leaf/gate"
@@ -6,12 +6,14 @@ import (
 	"server/conf"
 	"server/game/internal/common"
 	"server/game/internal/dao"
+	"server/game/internal/service"
 	"server/msg"
 	"server/publicconst"
+	"server/util"
 	"time"
 )
 
-func rpcRegist(args []interface{}) {
+func RpcRegist(args []interface{}) {
 	userId := args[0].(string)
 	accountId := args[1].(int64)
 	agent := args[2].(gate.Agent)
@@ -30,8 +32,8 @@ func rpcRegist(args []interface{}) {
 	agent.WriteMsg(res)
 }
 
-// rpcLogin 登录
-func rpcLogin(args []interface{}) {
+// RpcLogin 登录
+func RpcLogin(args []interface{}) {
 	userId := args[0].(string)
 	accountId := args[1].(int64)
 	agent := args[2].(gate.Agent)
@@ -46,14 +48,20 @@ func rpcLogin(args []interface{}) {
 	}
 
 	// 设置userdata
-	var userData = common.PlayerMgr.FindPlayerData(userId)
+	var userData = common.PlayerMgr.FindPlayerData(accountId)
 	if userData != nil {
 		userData.UpdateTime = uint32(time.Now().Unix())
 		userData.PlayerAgent = agent
 	} else {
-		userData = common.NewPlayerData(userId, accountId, agent)
+		userData = common.NewPlayerData(userId, agent)
+		userData.AccountInfo = dao.AccountDao.GetAccount(accountId)
+		if userData.AccountInfo == nil {
+			log.Error("AccountId:% accountData is null", accountId)
+			return
+		}
 		common.PlayerMgr.AddPlayerData(userData)
 	}
+	dao.AccountDao.UpdateAccountLogin(accountId)
 	userData.State = publicconst.Online
 	agent.SetUserData(userData)
 
@@ -64,10 +72,22 @@ func rpcLogin(args []interface{}) {
 	log.Debug("rpcLogin userId:%v login succ", userId)
 }
 
-// rpcLogout 退出
-func rpcLogout(args []interface{}) {
-	username := args[0].(string)
-	log.Debug("rpcLogout username:%v", username)
+// RequestClientHeartHandle 处理客户端心跳
+func RequestClientHeartHandle(args interface{}, playerData *common.PlayerData) {
+	playerData.UpdateTime = util.GetCurTime()
+
+	service.ServMgr.GetAccountService().OnHeart(playerData.AccountInfo.AccountId)
+	retMsg := &msg.ResponseClientHert{Result: int32(msg.ErrCode_SUCC)}
+	playerData.PlayerAgent.WriteMsg(retMsg)
+}
+
+// RequestLogoutHandle 客户端退出
+func RequestLogoutHandle(args interface{}, playerData *common.PlayerData) {
+	res := &msg.ResponseLogout{
+		Result: int32(msg.ErrCode_SUCC),
+	}
+	playerData.PlayerAgent.WriteMsg(res)
+	service.ServMgr.GetAccountService().OnClose(playerData)
 }
 
 func checkLogining(agent gate.Agent) bool {

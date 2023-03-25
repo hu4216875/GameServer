@@ -10,14 +10,13 @@ import (
 
 func main() {
 	excelDir := "./excel"
-	csvDir := "./csv"
+	csvDir := "../gamedata"
 	files := getFiles(excelDir)
-	fmt.Println(files)
 	fmt.Printf("开始导出配表 一共 %v 个\n", len(files))
 	for i := 0; i < len(files); i++ {
-		fmt.Printf("开始导出第%v个文件 文件:%v \n", i+1, files[i])
+		fmt.Printf("++++++++++开始导出第%v个文件 文件:%v \n", i+1, files[i])
 		excel_to_csv(excelDir+"/"+files[i], csvDir)
-		fmt.Printf("结束导出第%v个文件 文件:%v \n", i+1, files[i])
+		fmt.Printf("----------结束导出第%v个文件 文件:%v \n", i+1, files[i])
 	}
 	fmt.Printf("配表导出完成 \n")
 }
@@ -31,8 +30,6 @@ func getFiles(dir string) []string {
 
 	var ret []string
 	for i := 0; i < len(data); i++ {
-		fmt.Println("-----------", data[i].Name())
-
 		if !data[i].IsDir() {
 			name := data[i].Name()
 			if strings.Contains(name, ".xlsx") {
@@ -73,48 +70,48 @@ func excel_to_csv(filePath string, csvDir string) {
 	writer.Flush()
 
 	var colType []string
-	var colExclude []bool
+	var exportCol []bool
 	for i, row := range rows {
 		if i == 1 {
 			for _, colCell := range row {
-				if strings.HasPrefix(colCell, "#") {
-					colExclude = append(colExclude, true)
+				if strings.Contains(colCell, "#s") {
+					exportCol = append(exportCol, true)
 				} else {
-					colExclude = append(colExclude, false)
+					exportCol = append(exportCol, false)
 				}
 			}
 		} else if i == 2 {
 			var rowData string
-			for _, colCell := range row {
+			for index, colCell := range row {
 				colType = append(colType, colCell)
-				rowData += colCell + ","
+				if exportCol[index] {
+					rowData += colCell + "\t"
+				}
 			}
+
+			rowData = rowData[:len(rowData)-1]
 			rowData += "\n"
 			writer.WriteString(rowData)
 			writer.Flush()
 		} else if i > 2 {
 			var rowData string = ""
 			for col, colCell := range row {
-				//if !colExclude[col] {
-				//	if colType[col] == "string" || colType[col] == "int[]" {
-				//		rowData += "\"" + colCell + "\"" + ","
-				//	} else {
-				//		rowData += colCell + ","
-				//	}
-				//}
-				if colExclude[col] {
+				if !exportCol[col] {
 					continue
 				}
 				if colType[col] == "string" || colType[col] == "int[]" {
-					rowData += "\"" + colCell + "\"" + ","
+					rowData += "\"" + colCell + "\"" + "\t"
 				} else {
-					rowData += colCell + ","
+					rowData += colCell + "\t"
 				}
 			}
-			fmt.Println(rowData)
-			rowData += "\n"
-			writer.WriteString(rowData)
-			writer.Flush()
+			if len(rowData) > 0 {
+				rowData = rowData[:len(rowData)-1]
+				rowData += "\n"
+				writer.WriteString(rowData)
+				writer.Flush()
+			}
+
 		}
 	}
 }

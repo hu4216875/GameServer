@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"server/publicconst"
+	"server/util"
 	"sync"
 	"time"
 )
@@ -14,20 +15,22 @@ var (
 
 type PlayerDataMgr struct {
 	mutex sync.RWMutex
-	data  map[string]*PlayerData
+	data  map[int64]*PlayerData
+
+	recycleUpdateTime uint32
 }
 
 func NewPlayerDataMgr() *PlayerDataMgr {
 	ret := &PlayerDataMgr{}
-	ret.data = make(map[string]*PlayerData)
+	ret.data = make(map[int64]*PlayerData)
 	return ret
 }
 
 // FindPlayerData 查找玩家数据
-func (p *PlayerDataMgr) FindPlayerData(userId string) *PlayerData {
+func (p *PlayerDataMgr) FindPlayerData(accountId int64) *PlayerData {
 	p.mutex.RLock()
 	defer p.mutex.RUnlock()
-	if ret, ok := p.data[userId]; ok {
+	if ret, ok := p.data[accountId]; ok {
 		return ret
 	}
 	return nil
@@ -40,18 +43,18 @@ func (p *PlayerDataMgr) AddPlayerData(playerData *PlayerData) error {
 	}
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
-	p.data[playerData.UserId] = playerData
+	p.data[playerData.AccountInfo.AccountId] = playerData
 	return nil
 }
 
 // DestoryPlayerData 销毁玩家数据
-func (p *PlayerDataMgr) DestoryPlayerData(userId string) error {
+func (p *PlayerDataMgr) DestoryPlayerData(accountId int64) error {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
-	if _, ok := p.data[userId]; ok {
-		delete(p.data, userId)
+	if _, ok := p.data[accountId]; ok {
+		delete(p.data, accountId)
 	}
-	return errors.New(fmt.Sprintf("DestoryPlayerData user:%v userdata not exitst", userId))
+	return errors.New(fmt.Sprintf("DestoryPlayerData user:%v userdata not exitst", accountId))
 }
 
 // GetOfflinePlayer 获取所有离线的玩家
@@ -72,4 +75,21 @@ func (p *PlayerDataMgr) GetOfflinePlayer() []*PlayerData {
 		}
 	}
 	return ret
+}
+
+func (p *PlayerDataMgr) RecyclePlayerData() {
+	curTime := util.GetCurTime()
+	if int(curTime-p.recycleUpdateTime) < publicconst.MAX_RECYCLE_PLAYER_DATA {
+		return
+	}
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
+	for accountId, data := range p.data {
+		if data.State == publicconst.Offline {
+			if curTime-data.UpdateTime > uint32(publicconst.MAX_RECYCLE_PLAYER_DATA) {
+				delete(p.data, accountId)
+			}
+		}
+	}
+	p.recycleUpdateTime = curTime
 }

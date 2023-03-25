@@ -2,6 +2,7 @@ package common
 
 import (
 	"github.com/name5566/leaf/gate"
+	"server/game/internal/model"
 	"server/publicconst"
 	"time"
 )
@@ -9,17 +10,17 @@ import (
 // PlayerData 玩家数据
 type PlayerData struct {
 	UserId      string
-	AccountId   int64
 	State       publicconst.PlayerState // 玩家状态
 	UpdateTime  uint32                  // 更新时间
 	PlayerAgent gate.Agent
+	AccountInfo *model.Account
+	Items       []*model.Item // 玩家身上道具
 }
 
 // NewPlayerData 玩家数据
-func NewPlayerData(userId string, accountId int64, agent gate.Agent) *PlayerData {
+func NewPlayerData(userId string, agent gate.Agent) *PlayerData {
 	return &PlayerData{
 		UserId:      userId,
-		AccountId:   accountId,
 		PlayerAgent: agent,
 		UpdateTime:  uint32(time.Now().Unix()),
 		State:       publicconst.Logining,

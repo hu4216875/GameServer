@@ -3,6 +3,15 @@ package msg;
 
 option go_package = "./msg";
 
+message RequestGMCommand {
+  int32 CommandId = 1;
+  string Content = 2;
+}
+
+message ResponseGMCommand {
+  int32 Result = 1;
+}
+
 message RequestRegist {
   string UserId = 1;
   string Passwd = 2;
@@ -33,17 +42,71 @@ message ResponseKickOut {
   int32 Result = 2;
 }
 
-message RequestLoadItem {
+message Item {
+  uint32 ItemId = 1;
+  uint32 ItemNum = 2;
+  uint32 LimitDate = 3;
+}
 
+message RequestLoadItem {
 }
 
 message ResponseLoadItem {
   int32 Result = 1;
+  repeated Item Items = 2;
 }
 
 message NotifyUpdateItem {
-  uint32 ItemId = 1;
-  uint32 Num = 2;
-  uint32 LimitDate = 3;
+  repeated Item Items = 1;
 }
+
+message RequestClientHeart {
+}
+
+message ResponseClientHert {
+  int32 Result = 1;
+}
+
+message RequestOreInfo {
+
+}
+
+message ResponseOreInfo {
+  int32 Result = 1;
+  uint32 OreId = 2;
+  uint32 StartTime = 3;
+  uint32 Speed = 4;
+}
+
+message RequestOreTotal {
+}
+
+message ResponseOreTotal {
+  int32 Result = 1;
+  uint32 OreId = 2;
+  uint32 Total = 3;
+}
+
+message RequestStartOre {
+}
+
+message ResponseStartOre {
+  int32 Result = 1;
+}
+
+message RequestEndOre {
+}
+
+message ResponseEndOre {
+  int32 Result = 1;
+}
+
+message RequestUpgradeOreSpeed {
+}
+
+message ResponseUpgradeOreSpeed {
+  int32 Result = 1;
+}
+
+
 

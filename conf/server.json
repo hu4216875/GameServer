@@ -9,5 +9,7 @@
 	"LocalMongoDBUrl": "mongodb://localhost:27017",
 	"MaxGlobalMongoDBConn": 5,
 	"GlobalMongoDBUrl": "mongodb://localhost:27017",
-	"gameDataPath": "./gamedata/"
+	"GameDataPath": "./gamedata/",
+	"OreServerAddr": "192.168.5.8:8000",
+	"RpcServer": "192.168.5.8:6000"
 }

@@ -65,16 +65,6 @@ func handleLoginReq(args []interface{}) {
 	agent := args[1].(gate.Agent)
 	log.Debug("handleLoginReq userid:%v start login", m.UserId)
 	res := &msg.ResponseLogin{}
-
-	playerData := game.GetPlayerData(m.UserId)
-	if playerData != nil && playerData.PlayerAgent == agent {
-		if playerData.State == publicconst.Logining {
-			res.Result = int32(msg.ErrCode_ISLOGINING)
-			agent.WriteMsg(res)
-			return
-		}
-	}
-
 	// 开启携程第三方验证
 	skeleton.Go(func() {
 		// 账户不存在
@@ -86,11 +76,12 @@ func handleLoginReq(args []interface{}) {
 			res.Result = int32(msg.ErrCode_FORBIDDEN_USER)
 		}
 
+		playerData := game.GetPlayerData(account.AccountId)
 		// 通过了校验 如果其他地方有登录则踢下线
 		if playerData != nil && playerData.State != publicconst.Offline {
 			kickMsg := &msg.ResponseKickOut{Result: int32(msg.ErrCode_OTHER_LOGIN)}
 			playerData.PlayerAgent.WriteMsg(kickMsg)
-			playerData.PlayerAgent.Close()
+			playerData.PlayerAgent.Destroy()
 		}
 
 		if result != int32(msg.ErrCode_SUCC) {

@@ -10,6 +10,6 @@ var (
 	ChanRPC = internal.ChanRPC
 )
 
-func GetPlayerData(userId string) *common.PlayerData {
-	return common.PlayerMgr.FindPlayerData(userId)
+func GetPlayerData(accountId int64) *common.PlayerData {
+	return common.PlayerMgr.FindPlayerData(accountId)
 }

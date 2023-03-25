@@ -1,16 +1,29 @@
 package internal
 
 import (
+	"github.com/name5566/leaf/gate"
 	"reflect"
+	"server/game/internal/common"
+	"server/game/internal/handle"
+	"server/msg"
 )
 
-type HandleFunc func(args []interface{})
+type HandleFunc func(args interface{}, playerData *common.PlayerData)
 
 func init() {
-	skeleton.RegisterChanRPC("Regist", rpcRegist)
-	skeleton.RegisterChanRPC("Login", rpcLogin)
-	skeleton.RegisterChanRPC("Logout", rpcLogout)
+	skeleton.RegisterChanRPC("Regist", handle.RpcRegist)
+	skeleton.RegisterChanRPC("Login", handle.RpcLogin)
 
+	handler(&msg.RequestLoadItem{}, makeHandleMsg(handle.RequestLoadItemHandle))
+	handler(&msg.RequestGMCommand{}, makeHandleMsg(handle.RequestGMCommandHandle))
+	handler(&msg.RequestClientHeart{}, makeHandleMsg(handle.RequestClientHeartHandle))
+	handler(&msg.RequestLogout{}, makeHandleMsg(handle.RequestLogoutHandle))
+
+	handler(&msg.RequestOreInfo{}, makeHandleMsg(handle.RequestOreInfoHandle))
+	handler(&msg.RequestOreTotal{}, makeHandleMsg(handle.RequestOreTotalHandle))
+	handler(&msg.RequestStartOre{}, makeHandleMsg(handle.RequestStartOreHandle))
+	handler(&msg.RequestEndOre{}, makeHandleMsg(handle.RequestEndOreHandle))
+	handler(&msg.RequestUpgradeOreSpeed{}, makeHandleMsg(handle.RequestUpgradeOreSpeedHandle))
 }
 
 func handler(m interface{}, h interface{}) {
@@ -19,20 +32,15 @@ func handler(m interface{}, h interface{}) {
 
 func makeHandleMsg(f HandleFunc) func(args []interface{}) {
 	return func(args []interface{}) {
-		f(args)
+		agent := args[1].(gate.Agent)
+		userData := agent.UserData()
+		if userData == nil {
+			kickMsg := &msg.ResponseKickOut{Result: int32(msg.ErrCode_USER_NOT_LOGIN)}
+			agent.WriteMsg(kickMsg)
+			agent.Destroy()
+			return
+		}
+		playerData := userData.(*common.PlayerData)
+		f(args[0], playerData)
 	}
-}
-
-func handleHello(args []interface{}) {
-	//// 收到的 Hello 消息
-	//m := args[0].(*msg.Hello)
-	//// 消息的发送者
-	//a := args[1].(gate.Agent)
-	//
-	//// 输出收到的消息的内容
-	//log.Debug("hello %v", m.GetName())
-	//// 给发送者回应一个 Hello 消息
-	//a.WriteMsg(&msg.Hello{
-	//	Name: m.GetName(),
-	//})
 }

@@ -8,7 +8,6 @@ import (
 	"server/game/internal/common"
 	"server/game/internal/dao"
 	"server/game/internal/service"
-	"server/publicconst"
 	"time"
 )
 
@@ -47,7 +46,8 @@ func clientHeartCheck(ticker *time.Ticker) {
 
 	select {
 	case <-ticker.C:
-		CheckClientLive()
+		checkClientLive()
+		common.PlayerMgr.RecyclePlayerData()
 	}
 
 }
@@ -60,11 +60,10 @@ func UpdateServerInfo() {
 	}
 }
 
-func CheckClientLive() {
+func checkClientLive() {
 	offlinePlayers := common.PlayerMgr.GetOfflinePlayer()
 	for i := 0; i < len(offlinePlayers); i++ {
-		offlinePlayers[i].State = publicconst.Offline
-		offlinePlayers[i].PlayerAgent.Destroy()
+		service.ServMgr.GetAccountService().OnClose(offlinePlayers[i])
 		log.Debug("##### userId:%v offline", offlinePlayers[i].UserId)
 	}
 }

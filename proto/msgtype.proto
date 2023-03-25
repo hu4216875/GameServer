@@ -5,20 +5,40 @@ option go_package = "./msg";
 
 
 enum MsgId {
-	ID_RequestRegist = 0;
-	ID_ResponseRegist = 1;
-	ID_RequestLogin = 2;
-	ID_ResponseLogin = 3;
-	ID_RequestLogout = 4;
-	ID_ResponseLogout = 5;
-	ID_ResponseKickOut = 6;
-	ID_RequestLoadItem = 7;
-	ID_ResponseLoadItem = 8;
-	ID_NotifyUpdateItem = 9;
+	ID_RequestGMCommand = 0;
+	ID_ResponseGMCommand = 1;
+	ID_RequestRegist = 2;
+	ID_ResponseRegist = 3;
+	ID_RequestLogin = 4;
+	ID_ResponseLogin = 5;
+	ID_RequestLogout = 6;
+	ID_ResponseLogout = 7;
+	ID_ResponseKickOut = 8;
+	ID_RequestLoadItem = 9;
+	ID_ResponseLoadItem = 10;
+	ID_NotifyUpdateItem = 11;
+	ID_RequestClientHeart = 12;
+	ID_ResponseClientHert = 13;
+	ID_RequestOreTotal = 14;
+	ID_ResponseOreTotal = 15;
+	ID_RequestStartOre = 16;
+	ID_ResponseStartOre = 17;
+	ID_RequestEndOre = 18;
+	ID_ResponseEndOre = 19;
+	ID_RequestUpgradeOreSpeed = 20;
+	ID_ResponseUpgradeOreSpeed = 21;
+	ID_RequestOreInfo = 22;
+	ID_ResponseOreInfo = 23;
+}
+
+enum GMCommand {
+	Command_NONE = 0;
+	AddItem = 1; //添加道具 数据格式 [{"itemId":1, "num":2}, {"itemId":2, "num":1}]
+	ReloadConfig = 2;//重新加载配置文件["item","system"]
 }
 
 enum ErrCode {
-	NONE = 0;
+	ERR_NONE = 0;
 	SUCC = 1;
 	SYSTEM_ERROR = 2; // 系统错误
 	USER_ID_EXIST = 3;// uid 已经存在
@@ -27,4 +47,9 @@ enum ErrCode {
 	FORBIDDEN_USER = 6;// 禁止用户登录
 	ISLOGINING = 7; // 登录中
 	OTHER_LOGIN = 8; // 其他地方登录
+	USER_NOT_LOGIN = 10;//玩家没有登录
+	HAS_START_ORE = 11; // 已经开始挖矿了
+	NO_START_ORE = 12; // 没有开始挖矿
+	NO_ENOUGH_ITEM = 13;// 没有足够的道具
+	NO_ORE_RESOURCE = 14; // 没有矿洞资源了
 }

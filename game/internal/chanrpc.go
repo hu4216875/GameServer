@@ -3,7 +3,7 @@ package internal
 import (
 	"github.com/name5566/leaf/gate"
 	"server/game/internal/common"
-	"server/publicconst"
+	"server/game/internal/service"
 )
 
 func init() {
@@ -21,7 +21,7 @@ func rpcCloseAgent(args []interface{}) {
 	agent := args[0].(gate.Agent)
 	if data := agent.UserData(); data != nil {
 		if playerData := data.(*common.PlayerData); playerData != nil {
-			playerData.State = publicconst.Offline
+			service.ServMgr.GetAccountService().OnClose(playerData)
 		}
 	}
 }

@@ -7,7 +7,7 @@ import (
 )
 
 var Server struct {
-	ServerId             int
+	ServerId             uint32
 	LogLevel             string
 	LogPath              string
 	WSAddr               string
@@ -22,6 +22,8 @@ var Server struct {
 	MaxGlobalMongoDBConn int
 	GlobalMongoDBUrl     string
 	GameDataPath         string
+	OreServerAddr        string
+	RpcServer            string
 }
 
 func init() {

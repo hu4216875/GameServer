@@ -7,7 +7,9 @@ import (
 	"server/db"
 	"server/game"
 	"server/gate"
+	"server/grpc"
 	"server/login"
+	"server/template"
 )
 
 func main() {
@@ -18,10 +20,11 @@ func main() {
 	lconf.ProfilePath = conf.Server.ProfilePath
 
 	// 初始化陪标数据
-	//	template.LoadTempalte()
+	template.LoadTempalte()
 
 	leaf.Run(
 		db.Module,
+		grpc.Module,
 		game.Module,
 		gate.Module,
 		login.Module,
