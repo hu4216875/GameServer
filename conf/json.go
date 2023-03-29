@@ -24,6 +24,7 @@ var Server struct {
 	GameDataPath         string
 	OreServerAddr        string
 	RpcServer            string
+	EtcdServer           []string
 }
 
 func init() {

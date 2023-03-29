@@ -15,6 +15,8 @@ type PlayerData struct {
 	PlayerAgent gate.Agent
 	AccountInfo *model.Account
 	Items       []*model.Item // 玩家身上道具
+
+	SceneServAddr string // 场景服务器地址
 }
 
 // NewPlayerData 玩家数据

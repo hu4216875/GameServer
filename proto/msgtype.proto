@@ -29,6 +29,10 @@ enum MsgId {
 	ID_ResponseUpgradeOreSpeed = 21;
 	ID_RequestOreInfo = 22;
 	ID_ResponseOreInfo = 23;
+	ID_RequestEnterBattle = 24;
+	ID_ResponseEnterBattle = 25;
+	ID_RequestLeaveBattle = 26;
+	ID_ResponseLeaveBattle = 27;
 }
 
 enum GMCommand {
@@ -52,4 +56,6 @@ enum ErrCode {
 	NO_START_ORE = 12; // 没有开始挖矿
 	NO_ENOUGH_ITEM = 13;// 没有足够的道具
 	NO_ORE_RESOURCE = 14; // 没有矿洞资源了
+	USER_IN_BATTLE = 15; // 玩家在战斗中了
+	USER_NOT_IN_BATTLE = 16;// 玩家不在战斗中
 }

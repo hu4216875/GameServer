@@ -4,5 +4,6 @@
   "RpcServerAddr": "192.168.5.8:8000",
   "MaxMongoDbConn" : 10,
   "MongoDbUrl": "mongodb://localhost:27017",
-  "GameDataPath": "./data/"
+  "GameDataPath": "./data/",
+  "EtcdServerAddr":["http://localhost:2379"]
 }

@@ -5,11 +5,13 @@ import "time"
 type OreErr int32
 
 var (
-	Ore_DB_Name           = "global"
-	Ore_DB_Collection     = "oreDistrict"
+	ORE_DB_NAME           = "global"
+	Ore_DB_COLLECTION     = "oreDistrict"
 	DB_OP_TIME_OUT        = 5 * time.Second
-	Ore_DB_Log_Collection = "oreDistrictLog"
+	Ore_DB_LOG_COLLECTION = "oreDistrictLog"
 	UINT32_MAX            = 4294967295
+	MAX_SERVICE_TIME      = 10 // 续约时间
+	SERVICE_PREFIX        = "/server/rpcServer/oreServer/"
 )
 
 const (

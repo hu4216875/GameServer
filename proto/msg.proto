@@ -108,5 +108,19 @@ message ResponseUpgradeOreSpeed {
   int32 Result = 1;
 }
 
+message RequestEnterBattle {
+}
+
+message ResponseEnterBattle {
+  int32 Result = 1;
+}
+
+message RequestLeaveBattle {
+}
+
+message ResponseLeaveBattle {
+  int32 Result = 1;
+}
+
 
 

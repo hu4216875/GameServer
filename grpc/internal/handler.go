@@ -10,6 +10,8 @@ func init() {
 	skeleton.RegisterChanRPC("StartOre", startOre)
 	skeleton.RegisterChanRPC("EndOre", endOre)
 	skeleton.RegisterChanRPC("UpgradeOreSpeed", upgradeOreSpeed)
+	skeleton.RegisterChanRPC("requestEnterBattle", requestEnterBattle)
+	skeleton.RegisterChanRPC("requestLeaveBattle", requestLeaveBattle)
 }
 
 func handler(m interface{}, h interface{}) {
@@ -42,4 +44,14 @@ func upgradeOreSpeed(args []interface{}) []interface{} {
 	oreId := args[1].(uint32)
 	newSpeed := args[2].(uint32)
 	return service.UpgradeOreSpeed(accountId, oreId, newSpeed)
+}
+
+func requestEnterBattle(args []interface{}) []interface{} {
+	accountId := args[0].(int64)
+	return service.RequestEnterBattle(accountId)
+}
+
+func requestLeaveBattle(args []interface{}) interface{} {
+	accountId := args[0].(int64)
+	return service.RequestLeaveHall(accountId)
 }

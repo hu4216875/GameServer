@@ -25,6 +25,7 @@ func (m *Module) OnInit() {
 	UpdateServerInfo()
 	m.initHeartTicker()
 	service.ServMgr.InitService()
+
 }
 
 func (m *Module) OnDestroy() {

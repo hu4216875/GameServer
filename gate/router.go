@@ -18,4 +18,6 @@ func init() {
 	msg.Processor.SetRouter(&msg.RequestEndOre{}, game.ChanRPC)
 	msg.Processor.SetRouter(&msg.RequestUpgradeOreSpeed{}, game.ChanRPC)
 	msg.Processor.SetRouter(&msg.RequestOreInfo{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.RequestEnterBattle{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.RequestLeaveBattle{}, game.ChanRPC)
 }

@@ -39,8 +39,14 @@ func (a *AccountService) OnClose(playerData *common.PlayerData) {
 	playerData.State = publicconst.Offline
 	playerData.PlayerAgent.Destroy()
 
+	accountId := playerData.AccountInfo.AccountId
 	if oreInfo := playerData.AccountInfo.OreInfo; oreInfo != nil && oreInfo.StartTime > 0 {
-		ServMgr.GetOreService().SettleOre(playerData.AccountInfo.AccountId, oreInfo)
+		ServMgr.GetOreService().SettleOre(accountId, oreInfo)
 	}
-	dao.AccountDao.UpdateAccountLogout(playerData.AccountInfo.AccountId)
+
+	if len(playerData.SceneServAddr) > 0 {
+		grpc.ChanRPC.Call1("requestLeaveBattle", accountId)
+		playerData.SceneServAddr = ""
+	}
+	dao.AccountDao.UpdateAccountLogout(accountId)
 }

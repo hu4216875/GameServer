@@ -116,3 +116,12 @@ func SendChangeSpeed() {
 	}
 	sendMsg(uint16(msg.MsgId_ID_RequestUpgradeOreSpeed), data)
 }
+
+func SendEnterBattle() {
+	enterBattle := &msg.RequestEnterBattle{}
+	data, err := proto.Marshal(enterBattle)
+	if err != nil {
+		log.Fatal("marshaling error: ", err)
+	}
+	sendMsg(uint16(msg.MsgId_ID_RequestEnterBattle), data)
+}

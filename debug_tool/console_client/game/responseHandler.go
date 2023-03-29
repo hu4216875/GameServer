@@ -19,6 +19,7 @@ func InitResponseHandler(conn net.Conn) {
 	registItemResponse()
 	registCmCommandResponse()
 	registOreResponse()
+	registBattleResponse()
 }
 
 func DisptchResponseMsg(msgId msg.MsgId, data []byte, len int) {

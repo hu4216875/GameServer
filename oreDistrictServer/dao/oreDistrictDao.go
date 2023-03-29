@@ -22,7 +22,7 @@ type oreDistrictDao struct {
 
 // LoadOreDistrict 加载所有矿洞
 func (o *oreDistrictDao) LoadOreDistrict() []*model.OreDistrict {
-	collection := db.GlobalClient.Database(common.Ore_DB_Name).Collection(common.Ore_DB_Collection)
+	collection := db.GlobalClient.Database(common.ORE_DB_NAME).Collection(common.Ore_DB_COLLECTION)
 	ctx, cancel := context.WithTimeout(context.Background(), common.DB_OP_TIME_OUT)
 	defer cancel()
 
@@ -43,7 +43,7 @@ func (o *oreDistrictDao) LoadOreDistrict() []*model.OreDistrict {
 
 // AddOreDistrict 添加矿洞
 func (o *oreDistrictDao) AddOreDistrict(data *model.OreDistrict) error {
-	collection := db.GlobalClient.Database(common.Ore_DB_Name).Collection(common.Ore_DB_Collection)
+	collection := db.GlobalClient.Database(common.ORE_DB_NAME).Collection(common.Ore_DB_COLLECTION)
 	ctx, cancel := context.WithTimeout(context.Background(), common.DB_OP_TIME_OUT)
 	defer cancel()
 
@@ -52,7 +52,7 @@ func (o *oreDistrictDao) AddOreDistrict(data *model.OreDistrict) error {
 	}
 
 	oreLog := model.NewOreDistrictLog(data.OreDistId)
-	logCollection := db.GlobalClient.Database(common.Ore_DB_Name).Collection(common.Ore_DB_Log_Collection)
+	logCollection := db.GlobalClient.Database(common.ORE_DB_NAME).Collection(common.Ore_DB_LOG_COLLECTION)
 	opts := options.UpdateOptions{}
 	opts.SetUpsert(true)
 	if _, err := logCollection.UpdateOne(ctx, bson.M{"oreid": data.OreDistId}, bson.D{{"$set", oreLog}}, &opts); err != nil {
@@ -63,7 +63,7 @@ func (o *oreDistrictDao) AddOreDistrict(data *model.OreDistrict) error {
 
 // AddOreDistrictPlayer 添加矿洞玩家
 func (o *oreDistrictDao) AddOreDistrictPlayer(ore *model.OreDistrict, player *model.OreDistrictPlayer) error {
-	collection := db.GlobalClient.Database(common.Ore_DB_Name).Collection(common.Ore_DB_Collection)
+	collection := db.GlobalClient.Database(common.ORE_DB_NAME).Collection(common.Ore_DB_COLLECTION)
 	ctx, cancel := context.WithTimeout(context.Background(), common.DB_OP_TIME_OUT)
 	defer cancel()
 
@@ -80,7 +80,7 @@ func (o *oreDistrictDao) AddOreDistrictPlayer(ore *model.OreDistrict, player *mo
 
 // RemoveOreDistrictPlayer 移除矿洞玩家
 func (o *oreDistrictDao) RemoveOreDistrictPlayer(ore *model.OreDistrict, player *model.OreDistrictPlayer) error {
-	collection := db.GlobalClient.Database(common.Ore_DB_Name).Collection(common.Ore_DB_Collection)
+	collection := db.GlobalClient.Database(common.ORE_DB_NAME).Collection(common.Ore_DB_COLLECTION)
 	ctx, cancel := context.WithTimeout(context.Background(), common.DB_OP_TIME_OUT)
 	defer cancel()
 
@@ -100,7 +100,7 @@ func (o *oreDistrictDao) RemoveOreDistrictPlayer(ore *model.OreDistrict, player 
 
 // UpdateOreDistrictPlayer 更新矿洞玩家
 func (o *oreDistrictDao) UpdateOreDistrictPlayer(ore *model.OreDistrict, player *model.OreDistrictPlayer) error {
-	collection := db.GlobalClient.Database(common.Ore_DB_Name).Collection(common.Ore_DB_Collection)
+	collection := db.GlobalClient.Database(common.ORE_DB_NAME).Collection(common.Ore_DB_COLLECTION)
 	ctx, cancel := context.WithTimeout(context.Background(), common.DB_OP_TIME_OUT)
 	defer cancel()
 
@@ -132,7 +132,7 @@ func (o *oreDistrictDao) UpdateOreDistrictPlayer(ore *model.OreDistrict, player 
 
 // UpdateOreRecord 更新矿洞记录
 func (o *oreDistrictDao) UpdateOreRecord(oreId uint32, accountId int64, num uint32) {
-	collection := db.GlobalClient.Database(common.Ore_DB_Name).Collection(common.Ore_DB_Log_Collection)
+	collection := db.GlobalClient.Database(common.ORE_DB_NAME).Collection(common.Ore_DB_LOG_COLLECTION)
 	ctx, cancel := context.WithTimeout(context.Background(), common.DB_OP_TIME_OUT)
 	defer cancel()
 	record := model.NewOreDistrictRecord(accountId, num)

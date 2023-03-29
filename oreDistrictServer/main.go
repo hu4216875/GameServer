@@ -33,13 +33,12 @@ func main() {
 	defer logger.Close()
 
 	db.OnInit()
+	defer db.OnDestroy()
+
 	template.LoadTempalte()
 
 	rpcs := grpc.NewServer()
 	service.RegistOreService(rpcs)
-	service.InitOreService()
-
-	defer db.OnDestroy()
 
 	lis, err := net.Listen("tcp", conf.Server.RpcServerAddr)
 	log.Debug("oreDistrict server start addr:%v", conf.Server.RpcServerAddr)

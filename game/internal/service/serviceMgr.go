@@ -23,6 +23,8 @@ func (m *ServiceMgr) InitService() {
 	m.registService(publicconst.GMService, NewGmService())
 	m.registService(publicconst.OreService, NewOreService())
 	m.registService(publicconst.AccountService, NewAccountService())
+	m.registService(publicconst.AccountService, NewAccountService())
+	m.registService(publicconst.BattleService, NewBattleService())
 
 	for _, service := range m.serviceMap {
 		service.OnInit()
@@ -63,6 +65,13 @@ func (m *ServiceMgr) GetOreService() *OreService {
 func (m *ServiceMgr) GetAccountService() *AccountService {
 	if data, ok := m.serviceMap[publicconst.AccountService]; ok {
 		return data.(*AccountService)
+	}
+	return nil
+}
+
+func (m *ServiceMgr) GetBattleService() *BattleService {
+	if data, ok := m.serviceMap[publicconst.BattleService]; ok {
+		return data.(*BattleService)
 	}
 	return nil
 }

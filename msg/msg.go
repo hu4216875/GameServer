@@ -31,4 +31,8 @@ func init() {
 	Processor.Register(&ResponseUpgradeOreSpeed{})
 	Processor.Register(&RequestOreInfo{})
 	Processor.Register(&ResponseOreInfo{})
+	Processor.Register(&RequestEnterBattle{})
+	Processor.Register(&ResponseEnterBattle{})
+	Processor.Register(&RequestLeaveBattle{})
+	Processor.Register(&ResponseLeaveBattle{})
 }

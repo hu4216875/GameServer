@@ -1,0 +1,8 @@
+{
+  "LogLevel": "debug",
+  "LogPath": "",
+  "RpcServerAddr": "192.168.5.8:4000",
+  "GameDataPath": "./data/",
+  "MaxPlayerNum": 2000,
+  "EtcdServerAddr":["http://localhost:2379"]
+}

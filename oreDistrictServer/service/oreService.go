@@ -92,10 +92,11 @@ func (o *oreService) UpdateOrePlayer(ctx context.Context, req *protos.RequestUpd
 
 func RegistOreService(server *grpc.Server) {
 	protos.RegisterOreDistrictServiceServer(server, new(oreService))
+	initOreService()
 }
 
-// InitOreService 初始化矿洞
-func InitOreService() {
+// initOreService 初始化矿洞
+func initOreService() {
 	oreDistircts = dao.OreDistrictDao.LoadOreDistrict()
 	// 获取所有的矿洞配置没有的则需要加上
 	ores := template.GetOreTempalte().GetAll()
@@ -106,9 +107,7 @@ func InitOreService() {
 			oreDistircts = append(oreDistircts, data)
 		}
 	}
-	//addPlayer(1, 4, 1, 1000)
-	//changePlayerSpeed(1, 3, 1500)
-	//settlePlayer(1, 3)
+	registService(int64(common.MAX_SERVICE_TIME))
 }
 
 // addPlayer 添加玩家
@@ -279,8 +278,4 @@ func calcOreEndTime(ore *model.OreDistrict) uint32 {
 		endTime = uint32(common.UINT32_MAX)
 	}
 	return endTime
-}
-
-func updateOreDistrict(oreId uint32, player *model.OreDistrictPlayer) {
-
 }

@@ -23,7 +23,7 @@ type Module struct {
 
 func (m *Module) OnInit() {
 	m.Skeleton = skeleton
-	service.ConnOreServer()
+	service.InitRpcClient()
 
 	skeleton.Go(func() {
 		m.startRpcServer()
@@ -48,4 +48,8 @@ func (m *Module) startRpcServer() {
 	}
 	defer lis.Close()
 	rpcs.Serve(lis)
+}
+
+func (m *Module) SetSceneCloseFunc(sceneClose func(sceneAddr string)) {
+	service.SetSceneCloseFunc(sceneClose)
 }

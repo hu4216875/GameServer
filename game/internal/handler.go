@@ -24,6 +24,9 @@ func init() {
 	handler(&msg.RequestStartOre{}, makeHandleMsg(handle.RequestStartOreHandle))
 	handler(&msg.RequestEndOre{}, makeHandleMsg(handle.RequestEndOreHandle))
 	handler(&msg.RequestUpgradeOreSpeed{}, makeHandleMsg(handle.RequestUpgradeOreSpeedHandle))
+
+	handler(&msg.RequestEnterBattle{}, makeHandleMsg(handle.RequestEnterBattleHandle))
+	handler(&msg.RequestLeaveBattle{}, makeHandleMsg(handle.RequestLeaveBattleHandle))
 }
 
 func handler(m interface{}, h interface{}) {

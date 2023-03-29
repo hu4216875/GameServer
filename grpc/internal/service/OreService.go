@@ -2,46 +2,33 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"github.com/name5566/leaf/log"
-	"google.golang.org/grpc"
 	"server/conf"
 	"server/grpc-base/grpc-base/protos"
 	"server/msg"
 	"server/publicconst"
-	"server/template"
 	"server/util"
 	"time"
 )
 
 var (
-	oreClient protos.OreDistrictServiceClient
-
 	total           uint32 // 总量
 	endTime         uint32 // 结束时间
 	updateTotalTime uint32 // 更新总量的时间
 )
 
-func ConnOreServer() {
-	oreServerClient, err := grpc.Dial(conf.Server.OreServerAddr, grpc.WithInsecure())
-	if err != nil {
-		log.Fatal(fmt.Sprintf("ConnOreServer:%v", err))
-	}
-	oreClient = protos.NewOreDistrictServiceClient(oreServerClient)
-
-	req := protos.RequestOreInfo{ServerId: conf.Server.ServerId, OreId: template.GetSystemItemTemplate().GetOreId()}
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	res, err := oreClient.GetOreInfo(ctx, &req)
-	if err != nil {
-		log.Error("ConnOreServer %v", err)
-	}
-	total = res.Total
-	endTime = res.EndTime
+func SetOreInfo(oreTotal, oreEndTime uint32) {
+	total = oreTotal
+	endTime = oreEndTime
 	updateTotalTime = util.GetCurTime()
 }
 
 func GetOreTotal(oreId uint32) uint32 {
+	oreClient := GetOreRpcClient()
+	if oreClient == nil {
+		log.Error("GetOreTotal oreClient is nil")
+		return 0
+	}
 	curTime := uint32(time.Now().Unix())
 	if int(curTime-updateTotalTime) < publicconst.REFRESH_ORE_INTEVAL {
 		return total
@@ -62,6 +49,12 @@ func GetOreTotal(oreId uint32) uint32 {
 
 // StartOre 开始挖矿
 func StartOre(accountId int64, oreId, speed uint32) msg.ErrCode {
+	oreClient := GetOreRpcClient()
+	if oreClient == nil {
+		log.Error("StartOre oreClient is nil")
+		return 0
+	}
+
 	req := protos.RequestAddOrePlayer{
 		OreId:     oreId,
 		AccountId: accountId,
@@ -89,6 +82,12 @@ func StartOre(accountId int64, oreId, speed uint32) msg.ErrCode {
 
 // EndOre 结束挖矿
 func EndOre(accountId int64, oreId uint32) uint32 {
+	oreClient := GetOreRpcClient()
+	if oreClient == nil {
+		log.Error("EndOre oreClient is nil")
+		return 0
+	}
+
 	req := protos.RequestSettleOrePlayer{
 		OreId:     oreId,
 		AccountId: accountId,
@@ -113,6 +112,12 @@ func EndOre(accountId int64, oreId uint32) uint32 {
 
 // UpgradeOreSpeed 升级挖矿速度
 func UpgradeOreSpeed(accountId int64, oreId, newSpeed uint32) []interface{} {
+	oreClient := GetOreRpcClient()
+	if oreClient == nil {
+		log.Error("UpgradeOreSpeed oreClient is nil")
+		return nil
+	}
+
 	var ret []interface{}
 	req := protos.RequestUpdateOrePlayer{
 		OreId:     oreId,

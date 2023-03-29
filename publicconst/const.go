@@ -29,6 +29,14 @@ var (
 	MAX_RECYCLE_PLAYER_DATA = 3600 // 玩家数据保留1小时
 
 	REFRESH_ORE_INTEVAL = 10 // 刷新矿洞总量间隔
+
+	SERVER_PREFIX  = "/server/gsServer/"
+	MAX_SERVER_TTL = 30
+
+	RPC_SERVER_PREFIX              = "/server/rpcServer"
+	RPC_SERVER_ORE_PREFIX          = RPC_SERVER_PREFIX + "/oreServer"
+	RPC_SERVER_BATTLE_HALL_PREFIX  = RPC_SERVER_PREFIX + "/hallServer"
+	RPC_SERVER_BATTLE_SCENE_PREFIX = RPC_SERVER_PREFIX + "/sceneServer"
 )
 
 const (
@@ -42,6 +50,7 @@ const (
 	ItemService
 	OreService
 	AccountService
+	BattleService
 )
 
 const (

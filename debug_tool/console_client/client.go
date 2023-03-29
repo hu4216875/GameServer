@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var g_userId = "test1"
+var g_userId = "test"
 var g_conn net.Conn
 
 // DisptchMsg
@@ -71,10 +71,11 @@ func main() {
 	game.SendRequestLoadItem(g_conn)
 	time.Sleep(1000)
 
+	game.SendEnterBattle()
 	//game.SendGmReload()
 
 	//game.SendLogoutMsg()
-	game.SendStartOre()
+	//	game.SendStartOre()
 
 	//game.SendStartOre()
 	//game.SendChangeSpeed()

@@ -1,0 +1,10 @@
+{
+  "LogLevel": "debug",
+  "LogPath": "",
+  "RpcServerAddr": "192.168.5.8:7000",
+  "MaxMongoDbConn" : 10,
+  "MongoDbUrl": "mongodb://localhost:27017",
+  "GameDataPath": "./data/",
+  "EtcdServerAddr":["http://localhost:2379"],
+  "HttpServer": "192.168.5.8:50000"
+}

@@ -15,6 +15,7 @@ var Server struct {
 	MaxMongoDbConn uint32
 	MongoDbUrl     string
 	GameDataPath   string
+	EtcdServerAddr []string
 }
 
 func init() {

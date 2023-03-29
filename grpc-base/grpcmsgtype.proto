@@ -1,0 +1,13 @@
+syntax = "proto3";
+package grpcmsg;
+
+option go_package = "grpc-base/protos";
+
+enum Grpc_ErrCode {
+	ERR_NONE = 0;
+	SUCC = 1;
+	SYSTEM_ERROR = 10002;
+	PALYER_IN_BATTLE = 10003;// 玩家在战斗中
+	SCENE_SERVER_FULL = 10004; // 服务器满了
+	SCENE_NOT_EXIST = 10005;// 战斗服务器不存在
+}

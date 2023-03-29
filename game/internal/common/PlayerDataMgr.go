@@ -93,3 +93,16 @@ func (p *PlayerDataMgr) RecyclePlayerData() {
 	}
 	p.recycleUpdateTime = curTime
 }
+
+func (p *PlayerDataMgr) GetScenePlayer(sceneAddr string) []*PlayerData {
+	p.mutex.RLock()
+	defer p.mutex.RUnlock()
+
+	var ret []*PlayerData
+	for _, data := range p.data {
+		if data.SceneServAddr == sceneAddr {
+			ret = append(ret, data)
+		}
+	}
+	return ret
+}
