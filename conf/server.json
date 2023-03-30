@@ -12,5 +12,6 @@
 	"GameDataPath": "./gamedata/",
 	"OreServerAddr": "192.168.5.8:8000",
 	"RpcServer": "192.168.5.8:6000",
-	"EtcdServer": ["http://localhost:2379"]
+	"EtcdServer": ["http://localhost:2379"],
+	"MaxRegistNum": 5000
 }

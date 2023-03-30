@@ -65,13 +65,13 @@ func main() {
 	}
 	game.InitResponseHandler(g_conn)
 
-	//game.SendRegistMsg(g_userId)
-	game.SendLoginMsg(g_userId)
+	game.SendRegistMsg(g_userId)
+	//game.SendLoginMsg(g_userId)
 	time.Sleep(1000)
-	game.SendRequestLoadItem(g_conn)
+	//	game.SendRequestLoadItem(g_conn)
 	time.Sleep(1000)
 
-	game.SendEnterBattle()
+	//game.SendEnterBattle()
 	//game.SendGmReload()
 
 	//game.SendLogoutMsg()

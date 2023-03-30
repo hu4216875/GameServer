@@ -11,7 +11,7 @@ type Account struct {
 	Pwd        string
 	AccountId  int64
 	Nick       string
-	ServerAddr string
+	ServerId   uint32
 	CreateTime uint32
 	UpdateTime uint32
 	Forbidden  bool // 是否禁止登录
@@ -23,7 +23,7 @@ func NewAccount(userId string, pwd string, accountId int64) *Account {
 		UserId:     userId,
 		Pwd:        pwd,
 		AccountId:  accountId,
-		ServerAddr: conf.Server.TCPAddr,
+		ServerId:   conf.Server.ServerId,
 		CreateTime: curTime,
 	}
 }

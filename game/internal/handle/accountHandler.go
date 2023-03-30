@@ -26,7 +26,7 @@ func RpcRegist(args []interface{}) {
 	// 注册成功的处理
 	if err == msg.ErrCode_SUCC {
 		// 更新注册数
-		dao.ServerInfoDao.UdpateRegistNum(conf.Server.TCPAddr)
+		dao.ServerInfoDao.UpdateRegistNum(conf.Server.ServerId)
 		log.Debug("userId:%v, accountId:%v rpcRegist succ", userId, accountId)
 	}
 	agent.WriteMsg(res)

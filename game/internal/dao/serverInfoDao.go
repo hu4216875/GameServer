@@ -7,7 +7,6 @@ import (
 	"server/db"
 	"server/game/internal/model"
 	"server/publicconst"
-	"time"
 )
 
 var (
@@ -17,12 +16,12 @@ var (
 type serverInfoDao struct {
 }
 
-func (s *serverInfoDao) ExistServerInfo(serverAddr string) bool {
+func (s *serverInfoDao) ExistServerInfo(serverId uint32) bool {
 	collection := db.GetGlobalClient().Database(publicconst.GLOBAL_DB_NAME).Collection(publicconst.GLOBAL_SERVERINFO_COLLECTION)
 	ctx, cancel := context.WithTimeout(context.Background(), publicconst.DB_OP_TIME_OUT)
 	defer cancel()
 
-	result := collection.FindOne(ctx, bson.M{"serveraddr": serverAddr})
+	result := collection.FindOne(ctx, bson.M{"serverid": serverId})
 	if result == nil {
 		return false
 	}
@@ -35,8 +34,8 @@ func (s *serverInfoDao) ExistServerInfo(serverAddr string) bool {
 }
 
 // AddServerInfo 添加服务器
-func (s *serverInfoDao) AddServerInfo(serverAddr string) {
-	serverInfo := model.NewServerInfo(serverAddr)
+func (s *serverInfoDao) AddServerInfo(serverId uint32) {
+	serverInfo := model.NewServerInfo(serverId)
 	collection := db.GetGlobalClient().Database(publicconst.GLOBAL_DB_NAME).Collection(publicconst.GLOBAL_SERVERINFO_COLLECTION)
 	ctx, cancel := context.WithTimeout(context.Background(), publicconst.DB_OP_TIME_OUT)
 	defer cancel()
@@ -46,25 +45,13 @@ func (s *serverInfoDao) AddServerInfo(serverAddr string) {
 	}
 }
 
-// UpdateServerTime 更新服务器时间
-func (s *serverInfoDao) UpdateServerTime(serverAddr string) {
-	curTime := uint32(time.Now().Unix())
+// UpdateRegistNum 更新注册数
+func (s *serverInfoDao) UpdateRegistNum(serverId uint32) {
 	collection := db.GetGlobalClient().Database(publicconst.GLOBAL_DB_NAME).Collection(publicconst.GLOBAL_SERVERINFO_COLLECTION)
 	ctx, cancel := context.WithTimeout(context.Background(), publicconst.DB_OP_TIME_OUT)
 	defer cancel()
 
-	if _, err := collection.UpdateOne(ctx, bson.M{"serveraddr": serverAddr}, bson.D{{"$set", bson.D{{"updatetime", curTime}}}}); err != nil {
-		log.Error("UpdateServerTime err:%v", err)
-	}
-}
-
-// UdpateRegistNum 更新注册数
-func (s *serverInfoDao) UdpateRegistNum(serverAddr string) {
-	collection := db.GetGlobalClient().Database(publicconst.GLOBAL_DB_NAME).Collection(publicconst.GLOBAL_SERVERINFO_COLLECTION)
-	ctx, cancel := context.WithTimeout(context.Background(), publicconst.DB_OP_TIME_OUT)
-	defer cancel()
-
-	if _, err := collection.UpdateOne(ctx, bson.M{"serveraddr": serverAddr}, bson.D{{"$inc", bson.D{{"registnum", 1}}}}); err != nil {
+	if _, err := collection.UpdateOne(ctx, bson.M{"serverid": serverId}, bson.D{{"$inc", bson.D{{"registnum", 1}}}}); err != nil {
 		log.Error("UpdateServerTime err:%v", err)
 	}
 }

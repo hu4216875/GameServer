@@ -1,13 +1,10 @@
 package model
 
-import (
-	"server/conf"
-	"time"
-)
+import "time"
 
 type ServerInfo struct {
 	ServerId   uint32
-	RegistNum  int64
+	RegistNum  uint32
 	UpdateTime uint32
 	CreateTime uint32
 	LimitNum   uint32
@@ -19,6 +16,5 @@ func NewServerInfo(serverId uint32) *ServerInfo {
 		ServerId:   serverId,
 		UpdateTime: curTime,
 		CreateTime: curTime,
-		LimitNum: conf.Server.MaxRegistNum,
 	}
 }

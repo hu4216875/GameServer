@@ -30,8 +30,9 @@ var (
 
 	REFRESH_ORE_INTEVAL = 10 // 刷新矿洞总量间隔
 
-	SERVER_PREFIX  = "/server/gsServer/"
-	MAX_SERVER_TTL = 30
+	GS_SERVER_PREFIX     = "/server/gs/"
+	RPC_GS_SERVER_PREFIX = "/server/rpcServer/gsServer/"
+	MAX_SERVER_TTL       = 30
 
 	RPC_SERVER_PREFIX              = "/server/rpcServer"
 	RPC_SERVER_ORE_PREFIX          = RPC_SERVER_PREFIX + "/oreServer"

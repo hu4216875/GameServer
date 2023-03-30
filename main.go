@@ -13,12 +13,17 @@ import (
 	"server/login"
 	"server/publicconst"
 	"server/template"
+	"strconv"
 )
 
 func registServer() {
-	serviceKey := publicconst.SERVER_PREFIX + conf.Server.TCPAddr
-	register := base.NewServiceRegister(conf.Server.EtcdServer, publicconst.SERVER_PREFIX, serviceKey, conf.Server.TCPAddr)
+	register := base.NewServiceRegister(conf.Server.EtcdServer, publicconst.RPC_GS_SERVER_PREFIX, publicconst.RPC_GS_SERVER_PREFIX+conf.Server.RpcServer, conf.Server.RpcServer)
 	if err := register.Register(int64(publicconst.MAX_SERVER_TTL)); err != nil {
+		log.Error("err:%v", err)
+	}
+
+	gsRegister := base.NewServiceRegister(conf.Server.EtcdServer, publicconst.GS_SERVER_PREFIX, publicconst.GS_SERVER_PREFIX+conf.Server.TCPAddr, strconv.Itoa(int(conf.Server.ServerId)))
+	if err := gsRegister.Register(int64(publicconst.MAX_SERVER_TTL)); err != nil {
 		log.Error("err:%v", err)
 	}
 }

@@ -25,6 +25,7 @@ var Server struct {
 	OreServerAddr        string
 	RpcServer            string
 	EtcdServer           []string
+	MaxRegistNum         uint32
 }
 
 func init() {

@@ -25,7 +25,6 @@ func (m *Module) OnInit() {
 	UpdateServerInfo()
 	m.initHeartTicker()
 	service.ServMgr.InitService()
-
 }
 
 func (m *Module) OnDestroy() {
@@ -54,10 +53,8 @@ func clientHeartCheck(ticker *time.Ticker) {
 }
 
 func UpdateServerInfo() {
-	if dao.ServerInfoDao.ExistServerInfo(conf.Server.TCPAddr) {
-		dao.ServerInfoDao.UpdateServerTime(conf.Server.TCPAddr)
-	} else {
-		dao.ServerInfoDao.AddServerInfo(conf.Server.TCPAddr)
+	if !dao.ServerInfoDao.ExistServerInfo(conf.Server.ServerId) {
+		dao.ServerInfoDao.AddServerInfo(conf.Server.ServerId)
 	}
 }
 
